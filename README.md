@@ -87,3 +87,31 @@ do same for the demo-is-even package
 
 all these above steps
 
+
+
+and after this setup nx to our lerna workspace
+
+```npx nx init```
+
+```npx run graph```
+
+
+for creating a dependepcy 
+
+change code in demo-is-even.ts
+
+```
+import {isOdd } from 'demo-is-odd';
+
+export function isEven(n : number): boolean {
+  return !isOdd(n);
+}
+```
+
+and add a dependency in package.json file of demo-is-even package
+```
+ "dependencies": {
+    "demo-is-odd": "*"
+  },
+  
+```

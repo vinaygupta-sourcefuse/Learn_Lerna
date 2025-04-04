@@ -6,6 +6,8 @@
   ],
   "devDependencies": {
     "jest": "^29.7.0",
-    "lerna": "^8.2.1"
+    "lerna": "^8.2.1",
+    "nx": "20.7.1",
+    "@nx/jest": "20.7.1"
   }
 }

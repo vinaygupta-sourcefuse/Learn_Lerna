@@ -25,6 +25,9 @@
   "bugs": {
     "url": "https://github.com/vinaygupta-sourcefuse/Learn_Lerna/issues"
   },
+  "dependencies": {
+    "demo-is-odd": "*"
+  },
   "devDependencies": {
     "jest": "^29.7.0",
     "typescript": "^5.8.2"
