@@ -1,121 +1,166 @@
-# Learn_Lerna
+# **Learn Lerna with Nx**
 
-To install lerna
+## **1. Install Lerna**
+To initialize a Lerna monorepo, run:
+```sh
+npx lerna init
+```
 
-```npx lerna init```
+---
 
+## **2. Create a Package**
+Create a package named `demo-is-odd`:
+```sh
+npx lerna create demo-is-odd
+```
+Navigate to the package:
+```sh
+cd packages/demo-is-odd
+```
 
-create a demo-is-odd package
+---
 
-```npx lerna create demo-is-odd```
+## **3. Setup TypeScript and Jest**
+Install dependencies:
+```sh
+npm add -D typescript jest
+```
+Initialize TypeScript:
+```sh
+npx tsc --init
+```
 
-```cd packages/demo-is-odd```
+---
 
-for use 'tsc' to build and use 'jest' to test 
-
-```npm add -D typescript jest```
-
-```npx tsc --init```
-
-inside .gitignore file
+## **4. Configure `.gitignore`**
+Add the following lines:
+```
 **/dist
 node_modules
-
-then enable in tsconfig file
-
-declartion : true;
-outDir : ./dist
-
-change package.json
-
-  "main": "lib/demo-is-odd.js",
-to
-  "main": "dist/demo-is-odd.js",
-
-and add
-  "types" : "dist/demo-is-odd.d.ts",
-
-and replace
- "files": [
-    "lib"
-  ],
-
-  with
-
-   "files": [
-    "dist"
-  ],
-
-and change scripts to 
-
- "scripts": {
-    "build":"tsc",
-    "test": "jest"
-  },
-
-  this
-
-
-
-after write test case in demo-is-odd.test.js
 ```
-const {isOdd} = require('../dist/demo-is-odd.js');
+
+---
+
+## **5. Configure `tsconfig.json`**
+In `tsconfig.json`, set:
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "./dist"
+  }
+}
+```
+
+---
+
+## **6. Modify `package.json`**
+Change:
+```json
+"main": "lib/demo-is-odd.js"
+```
+To:
+```json
+"main": "dist/demo-is-odd.js"
+```
+Add TypeScript declaration file:
+```json
+"types": "dist/demo-is-odd.d.ts"
+```
+Replace:
+```json
+"files": ["lib"]
+```
+With:
+```json
+"files": ["dist"]
+```
+Update scripts:
+```json
+"scripts": {
+  "build": "tsc",
+  "test": "jest"
+}
+```
+
+---
+
+## **7. Write Code & Tests**
+### **Write Logic (`demo-is-odd.ts`)**
+```ts
+export function isOdd(n: number): boolean {
+  return n % 2 !== 0;
+}
+```
+### **Write Test (`demo-is-odd.test.js`)**
+```js
+const { isOdd } = require('../dist/demo-is-odd.js');
 
 test('isOdd should return true', () => {
   expect(isOdd(1)).toBe(true);
   expect(isOdd(3)).toBe(true);
   expect(isOdd(4)).toBe(false);
-})
+});
 ```
 
-and after writing the logic in demo-is-odd.ts
+---
+
+## **8. Run Build & Test**
+Navigate to the root folder and run:
+```sh
+npx lerna run build --scope=demo-is-odd
+npx lerna run test --scope=demo-is-odd
 ```
-export function isOdd(n: number): boolean {
-  return n % 2 !== 0;
-}
+
+---
+
+## **9. Create `demo-is-even` Package**
+Repeat **all the above steps** for `demo-is-even`:
+```sh
+npx lerna create demo-is-even
 ```
 
-now run these in root folder
+Modify `demo-is-even.ts` to use `demo-is-odd`:
+```ts
+import { isOdd } from 'demo-is-odd';
 
-```npx lerna run build --scope=demo-is-odd```
-```npx lerna run test --scope=demo-is-odd```
-
-
-
-
-do same for the demo-is-even package
-
-all these above steps
-
-
-
-and after this setup nx to our lerna workspace
-
-```npx nx init```
-
-```npx run graph```
-
-
-for creating a dependepcy 
-
-change code in demo-is-even.ts
-
-```
-import {isOdd } from 'demo-is-odd';
-
-export function isEven(n : number): boolean {
+export function isEven(n: number): boolean {
   return !isOdd(n);
 }
 ```
 
-and add a dependency in package.json file of demo-is-even package
-```
- "dependencies": {
-    "demo-is-odd": "*"
-  },
-  
+Add dependency in `demo-is-even/package.json`:
+```json
+"dependencies": {
+  "demo-is-odd": "*"
+}
 ```
 
-for running all test(first run the dependency)
+---
 
-npx lerna test
+## **10. Setup Nx in Lerna**
+To integrate Nx with Lerna:
+```sh
+npx nx init
+```
+Generate dependency graph:
+```sh
+npx nx graph
+```
+
+---
+
+## **11. Run Tests with Dependencies**
+Ensure dependencies run first:
+```sh
+npx lerna run test
+```
+
+---
+
+## **12. Run Everything**
+To build and test everything:
+```sh
+npx lerna run build
+npx lerna run test
+```
