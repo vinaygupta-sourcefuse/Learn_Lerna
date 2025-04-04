@@ -115,3 +115,7 @@ and add a dependency in package.json file of demo-is-even package
   },
   
 ```
+
+for running all test(first run the dependency)
+
+npx lerna test
